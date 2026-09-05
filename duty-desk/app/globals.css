@@ -1,0 +1,177 @@
+@import "tailwindcss";
+
+/* ============================================================
+   StudyLogix 风格设计令牌（Nothing OS 式极简深色）
+   - 近黑背景 / 低对比边框 / 单一暖琥珀强调色 / 小圆角 / 大号展示标题
+   ============================================================ */
+:root {
+  /* Surface */
+  --bg: #0d0d0d;
+  --card: #161616;
+  --raised: #1e1e1e;
+  --hover: #252525;
+
+  /* Text */
+  --text: #f0f0f0;
+  --muted: #8c8c8c;
+  --faint: #3d3d3d;
+
+  /* Borders */
+  --border: #272727;
+  --border-strong: #383838;
+
+  /* Single accent — warm amber, used sparingly */
+  --accent: #d4a843;
+  --accent-soft: rgba(212, 168, 67, 0.12);
+
+  /* Status */
+  --danger: #f87171;
+  --ok: #4ade80;
+  --warn: #fb923c;
+
+  /* 科目低饱和色（深色底上区分用） */
+  --c-math: #7aa2f7;  --c-math-bg: rgba(122, 162, 247, 0.14);
+  --c-eng: #9ece6a;   --c-eng-bg: rgba(158, 206, 106, 0.14);
+  --c-pol: #f7768e;   --c-pol-bg: rgba(247, 118, 142, 0.14);
+  --c-elec: #e0af68;  --c-elec-bg: rgba(224, 175, 104, 0.14);
+  --c-work: #7f849c;  --c-work-bg: rgba(127, 132, 156, 0.14);
+  --c-fitness: #e5c07b; --c-fitness-bg: rgba(229, 192, 123, 0.14);
+  --c-other: #565f89; --c-other-bg: rgba(86, 95, 137, 0.14);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: 0.005em;
+}
+
+/* 展示标题（Space Grotesk 感觉：紧字距、短行高） */
+h1 {
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+@media (min-width: 768px) {
+  h1 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
+}
+
+/* ===== 卡片：小圆角、细边框、极低对比 ===== */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px; /* r-lg */
+  padding: 0.75rem 1rem;
+}
+.card-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--faint);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.6rem;
+}
+
+/* ===== 按钮 ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.55rem 1rem;
+  border-radius: 6px; /* r-md */
+  font-weight: 600;
+  font-size: 0.9rem;
+  background: var(--accent);
+  color: #0d0d0d;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity var(--t-fast, 120ms) ease;
+}
+.btn:active { opacity: 0.7; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-lg { padding: 0.85rem 1.5rem; font-size: 1.05rem; border-radius: 8px; }
+.btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.btn-ghost-accent { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+.btn-danger { background: var(--danger); color: #0d0d0d; }
+.btn-sm { padding: 0.3rem 0.6rem; font-size: 0.8rem; border-radius: 4px; }
+
+.input {
+  width: 100%;
+  background: var(--raised);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.55rem 0.75rem;
+  font-size: 1rem;
+  color: var(--text);
+}
+.input:focus { outline: 1px solid var(--accent); outline-offset: 1px; }
+textarea.input { resize: vertical; min-height: 3.5rem; }
+select.input { appearance: auto; }
+
+.label {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--faint);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0.5rem 0 0.25rem;
+}
+
+/* ===== 标签：低饱和 ===== */
+.tag {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.08rem 0.45rem;
+  border-radius: 3px; /* r-sm */
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+.tag-math  { background: var(--c-math-bg); color: var(--c-math); }
+.tag-eng   { background: var(--c-eng-bg); color: var(--c-eng); }
+.tag-pol   { background: var(--c-pol-bg); color: var(--c-pol); }
+.tag-elec  { background: var(--c-elec-bg); color: var(--c-elec); }
+.tag-work  { background: var(--c-work-bg); color: var(--c-work); }
+.tag-fitness { background: var(--c-fitness-bg); color: var(--c-fitness); }
+.tag-other { background: var(--c-other-bg); color: var(--c-other); }
+
+.muted { color: var(--muted); }
+.mono { font-variant-numeric: tabular-nums; font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace; }
+
+/* 分隔线 */
+.divider { height: 1px; background: var(--border); margin: 0.75rem 0; }
+
+/* 番茄钟大数字 */
+.timer-digit {
+  font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 4.2rem;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+@media (min-width: 768px) {
+  .timer-digit { font-size: 6.5rem; }
+}
+
+/* 进度条 */
+.stat-bar {
+  height: 0.4rem;
+  border-radius: 2px;
+  background: var(--raised);
+  overflow: hidden;
+}
+.stat-bar > div { height: 100%; background: var(--accent); border-radius: 2px; }
+
+.pulse-dot {
+  display: inline-block; width: 0.45rem; height: 0.45rem; border-radius: 9999px;
+  background: var(--ok); margin-right: 0.35rem;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }

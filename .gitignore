@@ -1,0 +1,37 @@
+# 系统
+.DS_Store
+.dsh/
+
+# 依赖与缓存
+node_modules/
+.npm-cache/
+
+# Next.js 构建产物
+.next/
+out/
+
+# 运行时数据（SQLite 数据库，本地唯一）
+data/
+
+# Android SDK / 工具（体积数 GB，不进仓库）
+android-sdk/
+android-tools/jdk-*/
+android-tools/gradle-home/
+android-tools/android-home/
+android-tools/tmp/
+android-tools/*.tar.gz
+android-tools/*.zip
+android-tools/gradle-*.zip
+
+# Capacitor 生成物（可重新生成）
+desk-app/www/
+desk-app/android/
+desk-app/node_modules/
+
+# 二进制与临时文件
+*.apk
+*.png
+*.db
+*.db-wal
+*.db-shm
+*.log
