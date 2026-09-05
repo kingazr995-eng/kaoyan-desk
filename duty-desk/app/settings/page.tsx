@@ -12,6 +12,9 @@ export default function SettingsPage() {
   const [serverAddr, setServerAddr] = useState("");
   const [pending, setPending] = useState(0);
   const [syncMsg, setSyncMsg] = useState("");
+  const [davUser, setDavUser] = useState("");
+  const [davPass, setDavPass] = useState("");
+  const [cloudMsg, setCloudMsg] = useState("");
 
   const load = () =>
     api("/api/config")
@@ -42,6 +45,32 @@ export default function SettingsPage() {
     setPending(getPendingCount());
     setSyncMsg(n > 0 ? `✓ 已同步 ${n} 条到电脑` : "没有待同步内容（或电脑未开、地址未填）");
     setTimeout(() => setSyncMsg(""), 3000);
+  };
+
+  const saveDav = async () => {
+    try {
+      await api("/api/config", { method: "POST", body: { davUser, davPass } });
+      setCloudMsg("✓ 坚果云账号已保存");
+      await load();
+    } catch (e: any) { setCloudMsg(e.message); }
+    setTimeout(() => setCloudMsg(""), 2500);
+  };
+  const pushCloud = async () => {
+    setCloudMsg("推送中…");
+    try {
+      const r = await api("/api/cloud/sync", { method: "POST", body: { action: "push" } });
+      setCloudMsg(r.ok ? "✓ 已同步到坚果云" : (r.error || "推送失败"));
+    } catch (e: any) { setCloudMsg(e.message); }
+    setTimeout(() => setCloudMsg(""), 3000);
+  };
+  const pullCloud = async () => {
+    if (!confirm("从云端恢复会覆盖本地数据，确定？")) return;
+    setCloudMsg("拉取中…");
+    try {
+      const r = await api("/api/cloud/sync", { method: "POST", body: { action: "pull" } });
+      setCloudMsg(r.ok ? "✓ 已从云端恢复" : (r.error || "拉取失败"));
+    } catch (e: any) { setCloudMsg(e.message); }
+    setTimeout(() => setCloudMsg(""), 3000);
   };
 
   const saveKey = async () => {
@@ -143,6 +172,19 @@ export default function SettingsPage() {
           <button className="btn btn-sm btn-ghost-accent" onClick={doSync}>立即同步（{pending} 条待同步）</button>
         </div>
         {syncMsg && <div className="text-xs mt-1.5" style={{ color: "var(--accent)" }}>{syncMsg}</div>}
+      </div>
+
+      <div className="card">
+        <div className="card-title">云端同步（坚果云）</div>
+        <div className="muted text-xs mb-2">数据存到坚果云，电脑坏了/换设备都能恢复；{cfg?.hasDav ? "已配置 ✓" : "未配置"}</div>
+        <input className="input" placeholder="坚果云账号（邮箱）" value={davUser} onChange={(e) => setDavUser(e.target.value)} />
+        <input className="input mt-2" type="password" placeholder="应用密码（坚果云→账户信息→安全选项→应用密码）" value={davPass} onChange={(e) => setDavPass(e.target.value)} />
+        <div className="flex gap-2 mt-2">
+          <button className="btn btn-sm" onClick={saveDav}>保存账号</button>
+          <button className="btn btn-sm btn-ghost-accent" onClick={pushCloud}>推送到云</button>
+          <button className="btn btn-sm btn-ghost" onClick={pullCloud}>从云恢复</button>
+        </div>
+        {cloudMsg && <div className="text-xs mt-1.5" style={{ color: "var(--accent)" }}>{cloudMsg}</div>}
       </div>
 
       <div className="card">

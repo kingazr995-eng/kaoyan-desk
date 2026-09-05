@@ -16,6 +16,7 @@ export async function GET() {
     source,
     examDate: getSetting("exam_date") || null,
     profile,
+    hasDav: !!(getSetting("dav_user") && getSetting("dav_pass")),
   });
 }
 
@@ -31,6 +32,15 @@ export async function POST(req: NextRequest) {
   if (body.profile !== undefined) {
     setSetting("profile", JSON.stringify(body.profile || {}));
     return NextResponse.json({ ok: true, profile: body.profile || {} });
+  }
+  if (body.davUser !== undefined && body.davPass !== undefined) {
+    if (body.davUser && body.davPass) {
+      setSetting("dav_user", String(body.davUser));
+      setSetting("dav_pass", String(body.davPass));
+    } else {
+      run("DELETE FROM settings WHERE key IN ('dav_user','dav_pass')");
+    }
+    return NextResponse.json({ ok: true, hasDav: !!(body.davUser && body.davPass) });
   }
   const apiKey = String(body.apiKey || "").trim();
   if (!apiKey) {
