@@ -9,8 +9,6 @@ export default function SettingsPage() {
   const [profile, setProfile] = useState<any>({});
   const [msg, setMsg] = useState("");
   const [copied, setCopied] = useState("");
-  const [davUser, setDavUser] = useState("");
-  const [davPass, setDavPass] = useState("");
   const [cloudMsg, setCloudMsg] = useState("");
 
   const load = () =>
@@ -30,14 +28,6 @@ export default function SettingsPage() {
     load();
   }, []);
 
-  const saveDav = async () => {
-    try {
-      await api("/api/config", { method: "POST", body: { davUser, davPass } });
-      setCloudMsg("✓ 坚果云账号已保存");
-      await load();
-    } catch (e: any) { setCloudMsg(e.message); }
-    setTimeout(() => setCloudMsg(""), 2500);
-  };
   const pushCloud = async () => {
     setCloudMsg("推送中…");
     try {
@@ -147,12 +137,9 @@ export default function SettingsPage() {
 
       <div className="card">
         <div className="card-title">云端同步（坚果云）</div>
-        <div className="muted text-xs mb-2">数据存到坚果云，电脑坏了/换设备都能恢复；{cfg?.hasDav ? "已配置 ✓" : "未配置"}</div>
-        <input className="input" placeholder="坚果云账号（邮箱）" value={davUser} onChange={(e) => setDavUser(e.target.value)} />
-        <input className="input mt-2" type="password" placeholder="应用密码（坚果云→账户信息→安全选项→应用密码）" value={davPass} onChange={(e) => setDavPass(e.target.value)} />
-        <div className="flex gap-2 mt-2">
-          <button className="btn btn-sm" onClick={saveDav}>保存账号</button>
-          <button className="btn btn-sm btn-ghost-accent" onClick={pushCloud}>推送到云</button>
+        <div className="muted text-xs mb-2">账号已内置，数据变更后自动同步到坚果云；也可手动操作</div>
+        <div className="flex gap-2">
+          <button className="btn btn-sm btn-ghost-accent" onClick={pushCloud}>立即推送</button>
           <button className="btn btn-sm btn-ghost" onClick={pullCloud}>从云恢复</button>
         </div>
         {cloudMsg && <div className="text-xs mt-1.5" style={{ color: "var(--accent)" }}>{cloudMsg}</div>}

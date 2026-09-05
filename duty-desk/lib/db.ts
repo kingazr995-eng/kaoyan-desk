@@ -198,6 +198,15 @@ function backupNow() {
     mkdirSync(path.join(dataDir, "backup"), { recursive: true });
     writeFileSync(path.join(dataDir, "backup", t + ".md"), lines.join("\n"), "utf-8");
   } catch { /* 备份失败不阻断业务 */ }
+
+  // 自动推送到坚果云（异步，不阻塞业务）
+  (async () => {
+    try {
+      const { davPut, davMkdir, exportAllData } = await import("./webdav");
+      await davMkdir("/duty-desk/");
+      await davPut("/duty-desk/data.json", exportAllData());
+    } catch { /* 忽略 */ }
+  })();
 }
 
 export function getSetting(key: string): string | null {
