@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { api, syncNow, getPendingCount, getServerAddress, setServerAddress } from "@/lib/client";
+import { api } from "@/lib/client";
 
 export default function SettingsPage() {
   const [cfg, setCfg] = useState<any>(null);
@@ -9,9 +9,6 @@ export default function SettingsPage() {
   const [profile, setProfile] = useState<any>({});
   const [msg, setMsg] = useState("");
   const [copied, setCopied] = useState("");
-  const [serverAddr, setServerAddr] = useState("");
-  const [pending, setPending] = useState(0);
-  const [syncMsg, setSyncMsg] = useState("");
   const [davUser, setDavUser] = useState("");
   const [davPass, setDavPass] = useState("");
   const [cloudMsg, setCloudMsg] = useState("");
@@ -31,21 +28,7 @@ export default function SettingsPage() {
   };
   useEffect(() => {
     load();
-    setServerAddr(getServerAddress() || "");
-    setPending(getPendingCount());
   }, []);
-
-  const saveServer = () => {
-    setServerAddress(serverAddr.trim());
-    setSyncMsg("✓ 地址已保存");
-    setTimeout(() => setSyncMsg(""), 2000);
-  };
-  const doSync = async () => {
-    const n = await syncNow();
-    setPending(getPendingCount());
-    setSyncMsg(n > 0 ? `✓ 已同步 ${n} 条到电脑` : "没有待同步内容（或电脑未开、地址未填）");
-    setTimeout(() => setSyncMsg(""), 3000);
-  };
 
   const saveDav = async () => {
     try {
@@ -160,18 +143,6 @@ export default function SettingsPage() {
             <button className="btn btn-sm" onClick={saveProfile}>保存档案</button>
           </div>
         </div>
-      </div>
-
-      <div className="card">
-        <div className="card-title">数据同步（手机 ↔ 电脑）</div>
-        <div className="muted text-xs mb-2">手机端数据存本机、打开即用；要和电脑合并时，填电脑地址（同一 WiFi 下）再点同步</div>
-        <input className="input" placeholder="电脑地址，如 http://192.168.1.100:3000" value={serverAddr}
-          onChange={(e) => setServerAddr(e.target.value)} />
-        <div className="flex gap-2 mt-2">
-          <button className="btn btn-sm" onClick={saveServer}>保存地址</button>
-          <button className="btn btn-sm btn-ghost-accent" onClick={doSync}>立即同步（{pending} 条待同步）</button>
-        </div>
-        {syncMsg && <div className="text-xs mt-1.5" style={{ color: "var(--accent)" }}>{syncMsg}</div>}
       </div>
 
       <div className="card">

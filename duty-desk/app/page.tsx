@@ -10,7 +10,7 @@ import Countdown from "@/components/Countdown";
 import DailyCard from "@/components/DailyCard";
 import StudyCheckin from "@/components/StudyCheckin";
 import PlanSummary from "@/components/PlanSummary";
-import SyncBar from "@/components/SyncBar";
+
 
 const CARD_THEME: Record<string, { bg: string; border: string }> = {
   focus: { bg: "linear-gradient(135deg, rgba(212,168,67,.14), rgba(212,168,67,.02))", border: "rgba(212,168,67,.30)" },
@@ -60,8 +60,6 @@ export default function Dashboard() {
           <Link href="/settings" className="btn btn-sm btn-ghost">设置</Link>
         </div>
       </div>
-
-      <SyncBar />
 
       <Countdown />
 
